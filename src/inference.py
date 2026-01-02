@@ -23,7 +23,6 @@ def inference(video_path) -> None:
     while True:
         ret, frame = cap.read()
         if not ret:
-            print('No se pudo cargar el video')
             break
         frame_resized = cv2.resize(frame,(96,96))
         
@@ -60,5 +59,5 @@ def inference(video_path) -> None:
 
 if __name__ == "__main__":
 
-    video_path = "../resources/inputs/selfievideo.mp4"
+    video_path = "../resources/inputs/selfievideo2.mp4"
     inference(video_path=video_path)

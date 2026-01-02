@@ -4,6 +4,7 @@ import random ##allows generation of random numbers and selections
 
 import numpy as np #support for numerical operations and arrays
 import pandas as pd #data manipulation and analyis tools
+from matplotlib import pyplot as plt #library for visualize data
 
 
 #### PYTORCH ###
@@ -105,19 +106,37 @@ lr = 0.001
 optimizer = optim.Adam(model.parameters(), lr=lr)
 
 
-scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=3, factor=0.6, threshold=0.04, min_lr=1e-5)    
+scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=3, factor=0.6, threshold=0.04, min_lr=1e-8)    
 
 
 def main() -> None:
 
+    epoch_list = []
+    train_loss_list = []
+    val_loss_list = []
+
     for epoch in range(100):
         print('Epoch:', epoch)
-        train_one_epoch(train_loader, val_loader, model, criterion, optimizer, scheduler)
+        epoch_list.append(epoch)
+        train_loss,val_loss = train_one_epoch(train_loader, val_loader, model, criterion, optimizer, scheduler)
         print(' ')
+        train_loss_list.append(train_loss)
+        val_loss_list.append(val_loss)
 
 
     torch.save(model.state_dict(),"eficientNetFace.pth")
     print("modelo guardado correctamente")
+
+    plt.figure(figsize=(10,5))
+
+    plt.plot(epoch_list,train_loss_list, label = "Training Loss")
+    plt.plot(epoch_list,val_loss_list, label = "Validation Loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.savefig("../resources/dataLoss.png")
+    plt.close()
+   
 
 
 

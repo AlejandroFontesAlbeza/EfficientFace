@@ -108,7 +108,7 @@ def train_one_epoch(train_loader, test_loader, model, criterion, optimizer, sche
     lr=optimizer.param_groups[0]['lr']
     print("Current Lr:", lr)
 
-    return 0
+    return losses_epoch, val_losses_epoch
 
 
 
