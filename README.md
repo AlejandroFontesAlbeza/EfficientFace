@@ -161,9 +161,13 @@ This script performs inference using the trained model:
 
 - **Inference time** of the model at a ***GTX 1650Ti laptop*** with 96x96 images was of **8ms**
 
-<p align = "center">
-    <img src = "resources/inputs/selfievideo.gif" alt = "GIF 1" width = "200"/>
-    <img src = "resources/inputs/selfievideo2.gif" alt = "GIF 2" width = "200"/>
+<p align="center">
+    <a href="resources/inputs/selfievideo.gif">
+        <img src="resources/Img1.png" alt="GIF 1" width="150"/>
+    </a>
+    <a href="resources/inputs/selfievideo2.gif">
+        <img src="resources/Img2.png" alt="GIF 2" width="150"/>
+    </a>
 </p>
 
 ---
