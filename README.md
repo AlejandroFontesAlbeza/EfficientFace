@@ -2,11 +2,15 @@
 
 ![OS](https://img.shields.io/badge/-Linux-grey?logo=linux) ![PyTorch](https://img.shields.io/badge/PyTorch-black?logo=PyTorch) ![License](https://img.shields.io/badge/License-MIT-green) ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 
+<p align = "center">
+    <img src = "resources/Img.png" alt = "image" width = "400"/>
+</p>
+
 --- 
 
 ### Introduction
 
-EfficientFace is a computer vision project focused on **facial keypoint detection** using **transfer learning** with **EfficientNet-B0**. The project explores how a pre-trained convolutional neural network can be adapted to a regression task when only a limited amount of labeled data is available.
+EfficientFace is a deep learning project focused on **facial keypoint detection** using **transfer learning** with **EfficientNet-B0**. The project explores how a pre-trained convolutional neural network can be adapted to a regression task when only a limited amount of labeled data is available.
 
 In deep learning, training models from scratch is often impractical due to the large datasets and computational resources required. For this reason, **transfer learning** is widely used: a model pre-trained on a large dataset (such as ImageNet) is reused as a feature extractor and adapted to a new task. This approach allows the network to leverage previously learned visual representations, improving convergence speed and generalization.
 
@@ -189,3 +193,11 @@ This script performs inference using the trained model:
 
 ## References
 
+- Mastering Facial Keypoint Detection: A Comprehensive Transfer Learning Solution with PyTorch | Oleg Belkovskiy : 
+https://medium.com/@oleg.belkovskiy/mastering-facial-keypoint-detection-a-comprehensive-transfer-learning-solution-with-pytorch-2c4a88fc6c2d
+
+- What is Transfer Learning? | HugginFace: 
+https://www.youtube.com/watch?v=BqqfQnyjmgg&t=4s
+
+- Active Transfer Learning for Efficient Video-Specific Human Pose Estimation |  ComputerVisionFoundation Videos: 
+https://www.youtube.com/watch?v=Mm5LfGH6A1I
