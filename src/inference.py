@@ -11,7 +11,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = MyModel().to(device)
 
-model.load_state_dict(torch.load("eficientNetFace.pth", map_location=device))
+model.load_state_dict(torch.load("../resources/eficientNetFace.pth", map_location=device))
 model.eval()
 
 
