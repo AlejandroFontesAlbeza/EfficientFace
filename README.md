@@ -22,13 +22,170 @@ The main goal of this project is to gain practical experience with transfer lear
 ```
 EfficientFace/
 │
-├─ resources/           # Videos, gifs and visual examples
+├─ resources/           # resources for the project
 ├─ src/                 # Source code
 │  ├─ albumentations.py # Custom augmentation functions
 │  ├─ utils.py          # Dataset, model definition and training utilities
 │  ├─ train.py          # Training pipeline
-│  └─ inference.py      # Inference and GIF generation
-│
+│  └─ inference.py      # Inference
 ├─ requirements.txt     # Project dependencies
 └─ README.md
+└─ LICENSE
 ```
+
+### Dataset and dependencies
+
+The dataset used in this project is the **Facial Keypoints Detection** dataset from Kaggle.
+
+Due to size(**7k** images) and because it can be downloaded via *Kaggle* or *HugginFace*, the dataset is not included in this repository and is ignored via `.gitignore`.
+
+It can be download from:
+https://www.kaggle.com/competitions/facial-keypoints-detection/data
+
+
+For the dependencies, this project uses **Python +3.12** with linux and the required dependencies are listed in `requirements.txt`. For this type of projects often is done via a virtual environment. 
+To activate and activate de venv:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate ##Linux
+pip3 install -r requirements.txt
+```
+---
+
+### Source Code Overview
+
+1. ```albumentations.py```
+
+This module defines custom image augmentation functions, implemented to better understand how transformations work internally:
+
+- ```Add_Gaussian_Noise```
+
+- ```Add_Gaussian_Blur```
+
+- ```Adjust_Brightness```
+
+- ```Adjust_Contrast```
+
+- ```Invert_GrayScale```
+
+These augmentations are conceptually similar to ```torchvision.transforms``` but implemented manually for learning purposes.
+
+
+2. ```utils.py```
+
+This file contains several key components of the project:
+
+**Custom Dataset** (```FK_dataset```)
+
+A PyTorch ```Dataset``` class responsible for:
+
+- Loading images and keypoints.
+
+- Applying optional transformations.
+
+- Filtering invalid keypoints (out of bounds or NaN).
+
+- Returning (```image, keypoints```) tensors on the specified device.
+
+**Model Definition** (```MyModel```)
+
+EfficientNet-B0 is adapted for facial keypoint regression:
+
+- The pre-trained EfficientNet-B0 backbone is used as a feature extractor.
+
+- Early layers can be frozen using the ```grad_from``` parameter.
+
+- The original classification head is replaced with a regression head consisting of a dropout layer and a fully connected layer.
+
+- The output dimension corresponds to the number of facial keypoints.
+
+**Training Utilities**
+
+Includes helper functions used during training, one of the importants functions:
+
+- ```train_one_epoch```, which computes both training and validation loss using **MSELoss**.
+
+
+3. ```train.py```
+
+This script implements the full training pipeline:
+
+- Loads the dataset from CSV files using custom dataloaders.
+
+- Defines:
+
+    - Loss function: **Mean Squared Error (MSE)**
+
+    - Optimizer
+
+    - Learning rate scheduler(visualizing training improvement loss): ```ReduceLROnPlateau```
+
+- Trains the model for 100 epochs.
+
+- Saves the trained model weights to a ```.pth``` file.
+
+**Results**:
+
+- Final validation loss: approximately 2.3
+
+- Given image resolution of 96×96, this corresponds to an average error of ~2.3 pixels per keypoint.
+
+- **0%** overfitting because was applied to the model a ***dropout*** of 40% but probably needed more data
+
+<p align = "center">
+    <img src = "resources/dataLoss.png" alt = "MNIST dataset image" width = "600"/>
+</p>
+
+4. ```inference.py```
+
+This script performs inference using the trained model:
+
+- Loads the modified EfficientNet-B0 architecture and trained weights.
+
+- Runs keypoint prediction on a video input.
+
+- Writes the output as a GIF showing predicted facial keypoints.
+
+**Observed behavior**:
+
+- The model performs well when the face is clearly visible and less torsion.
+
+- Performance **degrades** when the face is far from the camera due to the absence of bounding box preprocessing, the dataset and the backbone used.
+
+- The limited dataset size (**~7k** images) also affects generalization.
+
+- **Inference time** of the model at a ***GTX 1650Ti laptop*** with 96x96 images was of **8ms**
+
+<p align = "center">
+    <img src = "resources/inputs/selfievideo.gif" alt = "GIF 1" width = "200"/>
+    <img src = "resources/inputs/selfievideo2.gif" alt = "GIF 2" width = "200"/>
+</p>
+
+---
+
+## Conclusions & Improvements
+
+#### Conclusions
+- Transfer learning enables effective facial keypoint detection with a relatively small dataset.
+
+- EfficientNet-B0 provides a regular balance between performance and efficiency not enough data.
+
+- The model achieves reasonable accuracy (~2.3 px error) on low-resolution images.
+
+- Lack of face detection and limited data are the main constraints of the current approach.
+
+#### Improvements
+
+- Increase dataset size or use more advanced data augmentation techniques.
+
+- Add a face detection step (bounding boxes) before keypoint regression.
+
+- Experiment with larger backbones or different regression heads.
+
+- Perform deeper fine-tuning and hyperparameter optimization.
+
+---
+
+## References
+

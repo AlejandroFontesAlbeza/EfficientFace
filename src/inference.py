@@ -1,7 +1,7 @@
 import torch
 
 import cv2
-import numpy as np
+import imageio
 import time
 from utils import MyModel
 
@@ -11,14 +11,15 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = MyModel().to(device)
 
-model.load_state_dict(torch.load("../resources/eficientNetFace.pth", map_location=device))
+model.load_state_dict(torch.load("../resources/efficientNetFace.pth", map_location=device))
 model.eval()
 
 
 
-def inference(video_path) -> None:
+def inference(video_path, output_gif_path) -> None:
 
     cap = cv2.VideoCapture(video_path)
+    frames_for_gif = []
 
     while True:
         ret, frame = cap.read()
@@ -46,7 +47,9 @@ def inference(video_path) -> None:
             x = int(x) 
             y = int(y)
             cv2.circle(frame_resized, (x, y), 2, (0, 255, 0), -1)
-        
+
+        frame_rgb = cv2.cvtColor(frame_resized, cv2.COLOR_BGR2RGB)
+        frames_for_gif.append(frame_rgb)        
         cv2.imshow("Keypoints", frame_resized)
 
 
@@ -57,7 +60,11 @@ def inference(video_path) -> None:
     cap.release()
     cv2.destroyAllWindows()
 
+    imageio.mimsave(output_gif_path, frames_for_gif, fps = 30)
+    print("GIF saved")
+
 if __name__ == "__main__":
 
     video_path = "../resources/inputs/selfievideo2.mp4"
-    inference(video_path=video_path)
+    output_gif_path = "../resources/inputs/selfievideo2.gif"
+    inference(video_path=video_path, output_gif_path=output_gif_path)
