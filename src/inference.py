@@ -60,11 +60,11 @@ def inference(video_path, output_gif_path) -> None:
     cap.release()
     cv2.destroyAllWindows()
 
-    imageio.mimsave(output_gif_path, frames_for_gif, fps = 30)
+    imageio.mimsave(output_gif_path, frames_for_gif, fps = 30, loop = 0)
     print("GIF saved")
 
 if __name__ == "__main__":
 
-    video_path = "../resources/inputs/selfievideo2.mp4"
-    output_gif_path = "../resources/inputs/selfievideo2.gif"
+    video_path = "../resources/inputs/selfievideo.mp4"
+    output_gif_path = "../resources/inputs/selfievideo.gif"
     inference(video_path=video_path, output_gif_path=output_gif_path)
